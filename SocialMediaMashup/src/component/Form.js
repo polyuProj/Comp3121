@@ -45,26 +45,36 @@ class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
       keyword: "",
-      videoList: [],
+      isYouTubeApiProcessing: false,
+      isFacebookApiProcessing: false,
+      isXXXApiProcessing: false,
+      isXXXXApiProcessing: false,
+      youtubeList: [],
+      facebookList: [],
+      xxxList: [],
+      xxxxList: [],
       activeTab: "1"
     };
     // This binding is necessary to make `this` work in the callback
-    this.getYouTubeItems = this.getYouTubeItems.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.getYouTubeItems = this.getYouTubeItems.bind(this);
+    this.getFacebookItems = this.getFacebookItems.bind(this);
+    this.getXXXItems = this.getXXXItems.bind(this);
+    this.getXXXXItems = this.getXXXXItems.bind(this);
+    this.showLoadingForYouTube = this.showLoadingForYouTube.bind(this);
+    this.showLoadingForFacebook = this.showLoadingForFacebook.bind(this);
+    this.showLoadingForXXX = this.showLoadingForXXX.bind(this);
+    this.showLoadingForXXXX = this.showLoadingForXXXX.bind(this);
+    this.showNoDataForYouTube = this.showNoDataForYouTube.bind(this);
+    this.showNoDataForFacebook = this.showNoDataForFacebook.bind(this);
+    this.showNoDataForXXX = this.showNoDataForXXX.bind(this);
+    this.showNoDataForXXXX = this.showNoDataForXXXX.bind(this);
   }
 
-  toggle(tab) {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab
-      });
-    }
-  }
-
+  // Network
   getYouTubeItems = () => {
-    this.setState({ loading: true });
+    this.setState({ isYouTubeApiProcessing: true });
     var getData = {
       params: {
         part: "snippet",
@@ -83,12 +93,123 @@ class Form extends React.Component {
     axios
       .get(Config.YOUTUBE_API_URL, getData, axiosConfig)
       .then(res => {
-        this.setState({ videoList: res.data.items, loading: false });
+        this.setState({
+          youtubeList: res.data.items,
+          isYouTubeApiProcessing: false
+        });
       })
       .catch(err => {
         console.log("ERROR: ", err);
+        this.setState({
+          isYouTubeApiProcessing: false
+        });
       });
   };
+
+  getFacebookItems = () => {
+    this.setState({ isFacebookApiProcessing: true });
+    var getData = {
+      params: {
+        part: "snippet",
+        maxResults: "10",
+        q: this.state.keyword,
+        // order: "date",
+        type: "video",
+        key: Constant.FACEBOOK_API_KEY
+      }
+    };
+    let axiosConfig = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    axios
+      .get(Config.YOUTUBE_API_URL, getData, axiosConfig)
+      .then(res => {
+        this.setState({
+          facebookList: res.data.items,
+          isFacebookApiProcessing: false
+        });
+      })
+      .catch(err => {
+        console.log("ERROR: ", err);
+        this.setState({
+          isFacebookApiProcessing: false
+        });
+      });
+  };
+
+  getXXXItems = () => {
+    this.setState({ isXXXApiProcessing: true });
+    var getData = {
+      params: {
+        part: "snippet",
+        maxResults: "10",
+        q: this.state.keyword,
+        // order: "date",
+        type: "video",
+        key: Constant.FACEBOOK_API_KEY
+      }
+    };
+    let axiosConfig = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    axios
+      .get(Config.YOUTUBE_API_URL, getData, axiosConfig)
+      .then(res => {
+        this.setState({ xxxList: res.data.items, isXXXApiProcessing: false });
+      })
+      .catch(err => {
+        console.log("ERROR: ", err);
+        this.setState({
+          isXXXApiProcessing: false
+        });
+      });
+  };
+
+  getXXXXItems = () => {
+    this.setState({ isXXXXApiProcessing: true });
+    var getData = {
+      params: {
+        part: "snippet",
+        maxResults: "10",
+        q: this.state.keyword,
+        // order: "date",
+        type: "video",
+        key: Constant.FACEBOOK_API_KEY
+      }
+    };
+    let axiosConfig = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    axios
+      .get(Config.YOUTUBE_API_URL, getData, axiosConfig)
+      .then(res => {
+        this.setState({
+          xxxxList: res.data.items,
+          isXXXXApiProcessing: false
+        });
+      })
+      .catch(err => {
+        console.log("ERROR: ", err);
+        this.setState({
+          isXXXXApiProcessing: false
+        });
+      });
+  };
+  // Network
+
+  toggle(tab) {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab
+      });
+    }
+  }
 
   updateKeyword = e => {
     this.setState({ keyword: e.target.value }, () => {});
@@ -97,6 +218,9 @@ class Form extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     this.getYouTubeItems();
+    this.getFacebookItems();
+    this.getXXXItems();
+    this.getXXXXItems();
   };
 
   displayForm = () => {
@@ -134,19 +258,72 @@ class Form extends React.Component {
     );
   };
 
-  render() {
-    if (this.state.loading) {
-      return (
-        <div className="container">
-          <br />
-          {this.displayForm()}
-          <br />
-          <Spinner color="success" />
-        </div>
-      );
+  showLoadingForYouTube = () => {
+    if (this.state.isYouTubeApiProcessing) {
+      return <Spinner color="success" />;
     }
+    return null;
+  };
 
-    if (!this.state.videoList.length) {
+  showLoadingForFacebook = () => {
+    if (this.state.isFacebookApiProcessing) {
+      return <Spinner color="success" />;
+    }
+    return null;
+  };
+
+  showLoadingForXXX = () => {
+    if (this.state.isXXXApiProcessing) {
+      return <Spinner color="success" />;
+    }
+    return null;
+  };
+
+  showLoadingForXXXX = () => {
+    if (this.state.isXXXXApiProcessing) {
+      return <Spinner color="success" />;
+    }
+    return null;
+  };
+
+  showNoDataForYouTube = () => {
+    if (!this.state.youtubeList.length && !this.state.isYouTubeApiProcessing) {
+      return this.displayNoDataFound();
+    }
+    return null;
+  };
+
+  showNoDataForFacebook = () => {
+    if (
+      !this.state.facebookList.length &&
+      !this.state.isFacebookApiProcessing
+    ) {
+      return this.displayNoDataFound();
+    }
+    return null;
+  };
+
+  showNoDataForXXX = () => {
+    if (!this.state.xxxList.length && !this.state.isXXXApiProcessing) {
+      return this.displayNoDataFound();
+    }
+    return null;
+  };
+
+  showNoDataForXXXX = () => {
+    if (!this.state.xxxxList.length && !this.state.isXXXXApiProcessing) {
+      return this.displayNoDataFound();
+    }
+    return null;
+  };
+
+  render() {
+    if (
+      !this.state.youtubeList.length &&
+      !this.state.facebookList.length &&
+      !this.state.xxxList.length &&
+      !this.state.xxxxList.length
+    ) {
       return (
         <div className="container">
           <br />
@@ -255,8 +432,9 @@ class Form extends React.Component {
                 <Row>
                   <Col sm="12">
                     <br />
-
-                    {this.state.videoList.map((video, index) => (
+                    {this.showLoadingForYouTube()}
+                    {this.showNoDataForYouTube()}
+                    {this.state.youtubeList.map((video, index) => (
                       <div key={index}>
                         <YouTubeItem
                           index={index}
@@ -275,7 +453,9 @@ class Form extends React.Component {
                 <Row>
                   <Col sm="12">
                     <br />
-                    {this.state.videoList.map((video, index) => (
+                    {this.showLoadingForFacebook()}
+                    {this.showNoDataForFacebook()}
+                    {this.state.facebookList.map((video, index) => (
                       <div key={index}>
                         <FacebookItem
                           index={index}
@@ -294,7 +474,9 @@ class Form extends React.Component {
                 <Row>
                   <Col sm="12">
                     <br />
-                    {this.state.videoList.map((video, index) => (
+                    {this.showLoadingForXXX()}
+                    {this.showNoDataForXXX()}
+                    {this.state.xxxList.map((video, index) => (
                       <div key={index}>
                         <FacebookItem
                           index={index}
@@ -313,7 +495,9 @@ class Form extends React.Component {
                 <Row>
                   <Col sm="12">
                     <br />
-                    {this.state.videoList.map((video, index) => (
+                    {this.showLoadingForXXXX()}
+                    {this.showNoDataForXXXX()}
+                    {this.state.xxxxList.map((video, index) => (
                       <div key={index}>
                         <FacebookItem
                           index={index}
