@@ -1,29 +1,10 @@
 import React from "react";
-import {
-  Card,
-  CardText,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  CardSubtitle
-} from "reactstrap";
+import { Card, CardText, CardBody, CardTitle, CardSubtitle } from "reactstrap";
 import moment from "moment";
 import * as Config from "../utils/Config";
 
 export default props => (
   <Card>
-    <CardHeader>
-      <img
-        src={props.icon}
-        alt=""
-        style={{
-          width: props.iconStyle.width,
-          height: props.iconStyle.height,
-          marginRight: "10px"
-        }}
-      />
-      {props.header}
-    </CardHeader>
     <CardBody>
       <CardTitle>
         <h4>{props.title}</h4>
