@@ -215,10 +215,10 @@ class Form extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    // this.retrieveYouTubeItems();
-    // this.retrieveFacebookItems();
+    this.retrieveYouTubeItems();
+    this.retrieveFacebookItems();
     this.retrieveXXXItems();
-    // this.retrieveXXXXItems();
+    this.retrieveXXXXItems();
   };
 
   displayForm = () => {
