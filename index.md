@@ -18,6 +18,6 @@
   </head>
   <body>
    	Check out our website here:
-   	<a style={{display: "table-cell"}} href="https://polyuproj.github.io/Mashup/SocialMediaMashup/build/#/" target="_blank">link</a>
+   	https://polyuproj.github.io/Mashup/SocialMediaMashup/build/#/
   </body>
 </html>
