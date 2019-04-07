@@ -6,6 +6,7 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <meta name="theme-color" content="#000000" />
+    <meta name="google-site-verification" content="KAj1xmsOnx_jRzGYcMf-1tm5R0s3_MIhU5bA302r7to" />
     <title>2019 Powerful Social Media Mashup</title>
    	<!-- Global site tag (gtag.js) - Google Analytics -->
   	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-137795181-1"></script>
