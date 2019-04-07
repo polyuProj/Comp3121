@@ -18,8 +18,10 @@ import * as Config from "../utils/Config";
 import * as Constant from "../utils/Constant";
 import YoutubeIcon from "../img/icon_youtube.png";
 import FacebookIcon from "../img/icon_facebook.png";
+import TumblrIcon from "../img/icon_tumblr.png";
 import YouTubeItem from "./YouTubeItem";
 import FacebookItem from "./FacebookItem";
+import TumblrItem from "./TumblrItem";
 
 const YouTubeIconStyle = {
   width: "32px",
@@ -31,7 +33,7 @@ const FacebookIconStyle = {
   height: "23px"
 };
 
-const xxxIconStyle = {
+const TumblrIconStyle = {
   width: "23px",
   height: "23px"
 };
@@ -48,11 +50,11 @@ class Form extends React.Component {
       keyword: "",
       isYouTubeApiProcessing: false,
       isFacebookApiProcessing: false,
-      isXXXApiProcessing: false,
+      isTumblrApiProcessing: false,
       isXXXXApiProcessing: false,
       youtubeList: [],
       facebookList: [],
-      xxxList: [],
+      tumblrList: [],
       xxxxList: [],
       activeTab: "1"
     };
@@ -65,12 +67,13 @@ class Form extends React.Component {
     this.retrieveXXXXItems = this.retrieveXXXXItems.bind(this);
     this.showLoadingForYouTube = this.showLoadingForYouTube.bind(this);
     this.showLoadingForFacebook = this.showLoadingForFacebook.bind(this);
-    this.showLoadingForXXX = this.showLoadingForXXX.bind(this);
+    this.showLoadingForTumblr = this.showLoadingForTumblr.bind(this);
     this.showLoadingForXXXX = this.showLoadingForXXXX.bind(this);
     this.showNoDataForYouTube = this.showNoDataForYouTube.bind(this);
     this.showNoDataForFacebook = this.showNoDataForFacebook.bind(this);
-    this.showNoDataForXXX = this.showNoDataForXXX.bind(this);
+    this.showNoDataForTumblr = this.showNoDataForTumblr.bind(this);
     this.showNoDataForXXXX = this.showNoDataForXXXX.bind(this);
+    this.TumblrApiCallback = this.TumblrApiCallback.bind(this);
   }
 
   // Network
@@ -141,33 +144,21 @@ class Form extends React.Component {
   };
 
   retrieveXXXItems = () => {
-    this.setState({ isXXXApiProcessing: true });
-    var getData = {
-      params: {
-        part: "snippet",
-        maxResults: "10",
-        q: this.state.keyword,
-        // order: "date",
-        type: "video",
-        key: Constant.FACEBOOK_API_KEY
-      }
-    };
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    };
-    axios
-      .get(Config.YOUTUBE_API_URL, getData, axiosConfig)
-      .then(res => {
-        this.setState({ xxxList: res.data.items, isXXXApiProcessing: false });
-      })
-      .catch(err => {
-        console.log("ERROR: ", err);
-        this.setState({
-          isXXXApiProcessing: false
-        });
-      });
+    this.setState({ isTumblrApiProcessing: true });
+    var tumblr = require("tumblr.js");
+    var client = tumblr.createClient({
+      consumer_key: Constant.TUMBLR_CONSUMER_KEY,
+      consumer_secret: Constant.TUMBLR_CONSUMER_SECRET,
+      token: Constant.TUMBLR_TOKEN,
+      token_secret: Constant.TUMBLR_TOKEN_SECRET
+    });
+
+    // Make the request
+    client.taggedPosts(
+      this.state.keyword,
+      { filter: "text" },
+      this.TumblrApiCallback
+    );
   };
 
   retrieveXXXXItems = () => {
@@ -204,6 +195,12 @@ class Form extends React.Component {
   };
   // Network
 
+  TumblrApiCallback(err, data) {
+    console.log(err);
+    console.log(data);
+    this.setState({ tumblrList: data, isTumblrApiProcessing: false });
+  }
+
   toggle(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
@@ -218,10 +215,10 @@ class Form extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.retrieveYouTubeItems();
-    this.retrieveFacebookItems();
+    // this.retrieveYouTubeItems();
+    // this.retrieveFacebookItems();
     this.retrieveXXXItems();
-    this.retrieveXXXXItems();
+    // this.retrieveXXXXItems();
   };
 
   displayForm = () => {
@@ -273,8 +270,8 @@ class Form extends React.Component {
     return null;
   };
 
-  showLoadingForXXX = () => {
-    if (this.state.isXXXApiProcessing) {
+  showLoadingForTumblr = () => {
+    if (this.state.isTumblrApiProcessing) {
       return <Spinner color="success" />;
     }
     return null;
@@ -304,8 +301,8 @@ class Form extends React.Component {
     return null;
   };
 
-  showNoDataForXXX = () => {
-    if (!this.state.xxxList.length && !this.state.isXXXApiProcessing) {
+  showNoDataForTumblr = () => {
+    if (!this.state.tumblrList.length && !this.state.isTumblrApiProcessing) {
       return this.displayNoDataFound();
     }
     return null;
@@ -322,7 +319,7 @@ class Form extends React.Component {
     if (
       !this.state.youtubeList.length &&
       !this.state.facebookList.length &&
-      !this.state.xxxList.length &&
+      !this.state.tumblrList.length &&
       !this.state.xxxxList.length
     ) {
       return (
@@ -393,15 +390,15 @@ class Form extends React.Component {
               }}
             >
               <img
-                src={null}
+                src={TumblrIcon}
                 alt=""
                 style={{
-                  width: xxxIconStyle.width,
-                  height: xxxIconStyle.height,
+                  width: TumblrIconStyle.width,
+                  height: TumblrIconStyle.height,
                   marginRight: "10px"
                 }}
               />
-              Instagram
+              Tumblr
             </NavLink>
           </NavItem>
           <NavItem>
@@ -473,16 +470,17 @@ class Form extends React.Component {
             <Row>
               <Col sm="12">
                 <br />
-                {this.showLoadingForXXX()}
-                {this.showNoDataForXXX()}
-                {this.state.xxxList.map((video, index) => (
+                {this.showLoadingForTumblr()}
+                {this.showNoDataForTumblr()}
+                {this.state.tumblrList.map((item, index) => (
                   <div key={index}>
-                    <FacebookItem
+                    <TumblrItem
                       index={index}
-                      title={video.snippet.title}
-                      description={video.snippet.description}
-                      videoId={video.id.videoId}
-                      publishedAt={video.snippet.publishedAt}
+                      title={item.blog_name}
+                      tags={item.tags}
+                      description={item.blog.description}
+                      url={item.post_url}
+                      publishedAt={item.date}
                     />
                     <div style={{ height: "10px" }}>&nbsp;</div>
                   </div>
