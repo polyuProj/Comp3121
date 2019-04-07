@@ -10,7 +10,8 @@ import {
   Card,
   Button,
   Row,
-  Col
+  Col,
+  CardColumns
 } from "reactstrap";
 import { Spinner } from "reactstrap";
 import classnames from "classnames";
@@ -63,7 +64,7 @@ class Form extends React.Component {
     this.toggle = this.toggle.bind(this);
     this.retrieveYouTubeItems = this.retrieveYouTubeItems.bind(this);
     this.retrieveFacebookItems = this.retrieveFacebookItems.bind(this);
-    this.retrieveXXXItems = this.retrieveXXXItems.bind(this);
+    this.retrieveTumblrItems = this.retrieveTumblrItems.bind(this);
     this.retrieveXXXXItems = this.retrieveXXXXItems.bind(this);
     this.showLoadingForYouTube = this.showLoadingForYouTube.bind(this);
     this.showLoadingForFacebook = this.showLoadingForFacebook.bind(this);
@@ -143,7 +144,7 @@ class Form extends React.Component {
       });
   };
 
-  retrieveXXXItems = () => {
+  retrieveTumblrItems = () => {
     this.setState({ isTumblrApiProcessing: true });
     var tumblr = require("tumblr.js");
     var client = tumblr.createClient({
@@ -196,8 +197,9 @@ class Form extends React.Component {
   // Network
 
   TumblrApiCallback(err, data) {
-    console.log(err);
-    console.log(data);
+    if (err) {
+      console.log("1" + err);
+    }
     this.setState({ tumblrList: data, isTumblrApiProcessing: false });
   }
 
@@ -216,9 +218,9 @@ class Form extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     this.retrieveYouTubeItems();
-    this.retrieveFacebookItems();
-    this.retrieveXXXItems();
-    this.retrieveXXXXItems();
+    // this.retrieveFacebookItems();
+    this.retrieveTumblrItems();
+    // this.retrieveXXXXItems();
   };
 
   displayForm = () => {
@@ -425,89 +427,98 @@ class Form extends React.Component {
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
           <TabPane tabId="1">
-            <Row>
-              <Col sm="12">
-                <br />
-                {this.showLoadingForYouTube()}
-                {this.showNoDataForYouTube()}
-                {this.state.youtubeList.map((video, index) => (
-                  <div key={index}>
-                    <YouTubeItem
-                      index={index}
-                      title={video.snippet.title}
-                      description={video.snippet.description}
-                      videoId={video.id.videoId}
-                      publishedAt={video.snippet.publishedAt}
-                    />
-                    <div style={{ height: "10px" }}>&nbsp;</div>
-                  </div>
-                ))}
-              </Col>
-            </Row>
+            <br />
+            {this.showLoadingForYouTube()}
+            {this.showNoDataForYouTube()}
+            <CardColumns>
+              <Row>
+                <Col sm="12">
+                  {this.state.youtubeList.map((video, index) => (
+                    <div key={index}>
+                      <YouTubeItem
+                        index={index}
+                        title={video.snippet.title}
+                        description={video.snippet.description}
+                        videoId={video.id.videoId}
+                        publishedAt={video.snippet.publishedAt}
+                      />
+                      <div style={{ height: "10px" }}>&nbsp;</div>
+                    </div>
+                  ))}
+                </Col>
+              </Row>
+            </CardColumns>
           </TabPane>
           <TabPane tabId="2">
-            <Row>
-              <Col sm="12">
-                <br />
-                {this.showLoadingForFacebook()}
-                {this.showNoDataForFacebook()}
-                {this.state.facebookList.map((video, index) => (
-                  <div key={index}>
-                    <FacebookItem
-                      index={index}
-                      title={video.snippet.title}
-                      description={video.snippet.description}
-                      videoId={video.id.videoId}
-                      publishedAt={video.snippet.publishedAt}
-                    />
-                    <div style={{ height: "10px" }}>&nbsp;</div>
-                  </div>
-                ))}
-              </Col>
-            </Row>
+            <br />
+            {this.showLoadingForFacebook()}
+            {this.showNoDataForFacebook()}
+            <CardColumns>
+              <Row>
+                <Col sm="12">
+                  {this.state.facebookList.map((video, index) => (
+                    <div key={index}>
+                      <FacebookItem
+                        index={index}
+                        title={video.snippet.title}
+                        description={video.snippet.description}
+                        videoId={video.id.videoId}
+                        publishedAt={video.snippet.publishedAt}
+                      />
+                      <div style={{ height: "10px" }}>&nbsp;</div>
+                    </div>
+                  ))}
+                </Col>
+              </Row>
+            </CardColumns>
           </TabPane>
           <TabPane tabId="3">
-            <Row>
-              <Col sm="12">
-                <br />
-                {this.showLoadingForTumblr()}
-                {this.showNoDataForTumblr()}
-                {this.state.tumblrList.map((item, index) => (
-                  <div key={index}>
-                    <TumblrItem
-                      index={index}
-                      title={item.blog_name}
-                      tags={item.tags}
-                      description={item.blog.description}
-                      url={item.post_url}
-                      publishedAt={item.date}
-                    />
-                    <div style={{ height: "10px" }}>&nbsp;</div>
-                  </div>
-                ))}
-              </Col>
-            </Row>
+            <br />
+            {this.showLoadingForTumblr()}
+            {this.showNoDataForTumblr()}
+            <CardColumns>
+              <Row>
+                <Col sm="12">
+                  {this.state.tumblrList.map((item, index) => (
+                    <div key={index}>
+                      <TumblrItem
+                        index={index}
+                        title={item.blog_name}
+                        tags={item.tags}
+                        description={item.blog.description}
+                        url={item.post_url}
+                        publishedAt={item.date}
+                      />
+                      <div style={{ height: "10px" }}>&nbsp;</div>
+                    </div>
+                  ))}
+                </Col>
+              </Row>
+            </CardColumns>
           </TabPane>
+
           <TabPane tabId="4">
-            <Row>
-              <Col sm="12">
-                <br />
-                {this.showLoadingForXXXX()}
-                {this.showNoDataForXXXX()}
-                {this.state.xxxxList.map((video, index) => (
-                  <div key={index}>
-                    <FacebookItem
-                      index={index}
-                      title={video.snippet.title}
-                      description={video.snippet.description}
-                      videoId={video.id.videoId}
-                      publishedAt={video.snippet.publishedAt}
-                    />
-                    <div style={{ height: "10px" }}>&nbsp;</div>
-                  </div>
-                ))}
-              </Col>
-            </Row>
+            <br />
+            {this.showLoadingForXXXX()}
+            {this.showNoDataForXXXX()}
+            <CardColumns>
+              <Row>
+                <Col sm="12">
+                  {this.state.xxxxList.map((video, index) => (
+                    <div key={index}>
+                      <FacebookItem
+                        index={index}
+                        title={video.snippet.title}
+                        description={video.snippet.description}
+                        videoId={video.id.videoId}
+                        publishedAt={video.snippet.publishedAt}
+                      />
+                      <div style={{ height: "10px" }}>&nbsp;</div>
+                    </div>
+                  ))}
+                </Col>
+              </Row>
+            </CardColumns>
           </TabPane>
         </TabContent>
       </div>
