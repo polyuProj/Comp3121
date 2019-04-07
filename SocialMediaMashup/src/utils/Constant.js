@@ -1,3 +1,3 @@
-export const YOUTUBE_API_KEY = "AIzaSyDEnj4whjl9EwHmSyUEUQb1nmKG8agvtWQ";
+export const YOUTUBE_API_KEY = "AIzaSyAeKVVwjIj0nXFpWbV1nDMEklCXSLMtNzM";
 export const FACEBOOK_API_KEY = "";
 export const TWITTER_API_KEY = "";
