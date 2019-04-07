@@ -340,8 +340,6 @@ class Form extends React.Component {
         <br />
         {this.displayForm()}
         <br />
-        {/* <Card>
-          <CardBody> */}
         <Nav tabs>
           <NavItem>
             <NavLink
@@ -514,8 +512,6 @@ class Form extends React.Component {
             </Row>
           </TabPane>
         </TabContent>
-        {/* </CardBody>
-        </Card> */}
       </div>
     );
   }
