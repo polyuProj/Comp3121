@@ -56,12 +56,13 @@ class Form extends React.Component {
       xxxxList: [],
       activeTab: "1"
     };
+
     // This binding is necessary to make `this` work in the callback
     this.toggle = this.toggle.bind(this);
-    this.getYouTubeItems = this.getYouTubeItems.bind(this);
-    this.getFacebookItems = this.getFacebookItems.bind(this);
-    this.getXXXItems = this.getXXXItems.bind(this);
-    this.getXXXXItems = this.getXXXXItems.bind(this);
+    this.retrieveYouTubeItems = this.retrieveYouTubeItems.bind(this);
+    this.retrieveFacebookItems = this.retrieveFacebookItems.bind(this);
+    this.retrieveXXXItems = this.retrieveXXXItems.bind(this);
+    this.retrieveXXXXItems = this.retrieveXXXXItems.bind(this);
     this.showLoadingForYouTube = this.showLoadingForYouTube.bind(this);
     this.showLoadingForFacebook = this.showLoadingForFacebook.bind(this);
     this.showLoadingForXXX = this.showLoadingForXXX.bind(this);
@@ -73,7 +74,7 @@ class Form extends React.Component {
   }
 
   // Network
-  getYouTubeItems = () => {
+  retrieveYouTubeItems = () => {
     this.setState({ isYouTubeApiProcessing: true });
     var getData = {
       params: {
@@ -106,7 +107,7 @@ class Form extends React.Component {
       });
   };
 
-  getFacebookItems = () => {
+  retrieveFacebookItems = () => {
     this.setState({ isFacebookApiProcessing: true });
     var getData = {
       params: {
@@ -139,7 +140,7 @@ class Form extends React.Component {
       });
   };
 
-  getXXXItems = () => {
+  retrieveXXXItems = () => {
     this.setState({ isXXXApiProcessing: true });
     var getData = {
       params: {
@@ -169,7 +170,7 @@ class Form extends React.Component {
       });
   };
 
-  getXXXXItems = () => {
+  retrieveXXXXItems = () => {
     this.setState({ isXXXXApiProcessing: true });
     var getData = {
       params: {
@@ -217,10 +218,10 @@ class Form extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.getYouTubeItems();
-    this.getFacebookItems();
-    this.getXXXItems();
-    this.getXXXXItems();
+    this.retrieveYouTubeItems();
+    this.retrieveFacebookItems();
+    this.retrieveXXXItems();
+    this.retrieveXXXXItems();
   };
 
   displayForm = () => {
@@ -325,7 +326,7 @@ class Form extends React.Component {
       !this.state.xxxxList.length
     ) {
       return (
-        <div className="container">
+        <div>
           <br />
           {this.displayForm()}
           <br />
@@ -335,186 +336,186 @@ class Form extends React.Component {
     }
 
     return (
-      <div className="container">
+      <div>
         <br />
         {this.displayForm()}
         <br />
-        <Card>
-          <CardBody>
-            <Nav tabs>
-              <NavItem>
-                <NavLink
-                  className={classnames({
-                    active: this.state.activeTab === "1"
-                  })}
-                  onClick={() => {
-                    this.toggle("1");
-                  }}
-                >
-                  <img
-                    src={YoutubeIcon}
-                    alt=""
-                    style={{
-                      width: YouTubeIconStyle.width,
-                      height: YouTubeIconStyle.height,
-                      marginRight: "10px"
-                    }}
-                  />
-                  YouTube
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  className={classnames({
-                    active: this.state.activeTab === "2"
-                  })}
-                  onClick={() => {
-                    this.toggle("2");
-                  }}
-                >
-                  <img
-                    src={FacebookIcon}
-                    alt=""
-                    style={{
-                      width: FacebookIconStyle.width,
-                      height: FacebookIconStyle.height,
-                      marginRight: "10px"
-                    }}
-                  />
-                  Facebook
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  className={classnames({
-                    active: this.state.activeTab === "3"
-                  })}
-                  onClick={() => {
-                    this.toggle("3");
-                  }}
-                >
-                  <img
-                    src={null}
-                    alt=""
-                    style={{
-                      width: xxxIconStyle.width,
-                      height: xxxIconStyle.height,
-                      marginRight: "10px"
-                    }}
-                  />
-                  API1
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  className={classnames({
-                    active: this.state.activeTab === "4"
-                  })}
-                  onClick={() => {
-                    this.toggle("4");
-                  }}
-                >
-                  <img
-                    src={null}
-                    alt=""
-                    style={{
-                      width: xxxxIconStyle.width,
-                      height: xxxxIconStyle.height,
-                      marginRight: "10px"
-                    }}
-                  />
-                  API2
-                </NavLink>
-              </NavItem>
-            </Nav>
-            <TabContent activeTab={this.state.activeTab}>
-              <TabPane tabId="1">
-                <Row>
-                  <Col sm="12">
-                    <br />
-                    {this.showLoadingForYouTube()}
-                    {this.showNoDataForYouTube()}
-                    {this.state.youtubeList.map((video, index) => (
-                      <div key={index}>
-                        <YouTubeItem
-                          index={index}
-                          title={video.snippet.title}
-                          description={video.snippet.description}
-                          videoId={video.id.videoId}
-                          publishedAt={video.snippet.publishedAt}
-                        />
-                        <div style={{ height: "10px" }}>&nbsp;</div>
-                      </div>
-                    ))}
-                  </Col>
-                </Row>
-              </TabPane>
-              <TabPane tabId="2">
-                <Row>
-                  <Col sm="12">
-                    <br />
-                    {this.showLoadingForFacebook()}
-                    {this.showNoDataForFacebook()}
-                    {this.state.facebookList.map((video, index) => (
-                      <div key={index}>
-                        <FacebookItem
-                          index={index}
-                          title={video.snippet.title}
-                          description={video.snippet.description}
-                          videoId={video.id.videoId}
-                          publishedAt={video.snippet.publishedAt}
-                        />
-                        <div style={{ height: "10px" }}>&nbsp;</div>
-                      </div>
-                    ))}
-                  </Col>
-                </Row>
-              </TabPane>
-              <TabPane tabId="3">
-                <Row>
-                  <Col sm="12">
-                    <br />
-                    {this.showLoadingForXXX()}
-                    {this.showNoDataForXXX()}
-                    {this.state.xxxList.map((video, index) => (
-                      <div key={index}>
-                        <FacebookItem
-                          index={index}
-                          title={video.snippet.title}
-                          description={video.snippet.description}
-                          videoId={video.id.videoId}
-                          publishedAt={video.snippet.publishedAt}
-                        />
-                        <div style={{ height: "10px" }}>&nbsp;</div>
-                      </div>
-                    ))}
-                  </Col>
-                </Row>
-              </TabPane>
-              <TabPane tabId="4">
-                <Row>
-                  <Col sm="12">
-                    <br />
-                    {this.showLoadingForXXXX()}
-                    {this.showNoDataForXXXX()}
-                    {this.state.xxxxList.map((video, index) => (
-                      <div key={index}>
-                        <FacebookItem
-                          index={index}
-                          title={video.snippet.title}
-                          description={video.snippet.description}
-                          videoId={video.id.videoId}
-                          publishedAt={video.snippet.publishedAt}
-                        />
-                        <div style={{ height: "10px" }}>&nbsp;</div>
-                      </div>
-                    ))}
-                  </Col>
-                </Row>
-              </TabPane>
-            </TabContent>
-          </CardBody>
-        </Card>
+        {/* <Card>
+          <CardBody> */}
+        <Nav tabs>
+          <NavItem>
+            <NavLink
+              className={classnames({
+                active: this.state.activeTab === "1"
+              })}
+              onClick={() => {
+                this.toggle("1");
+              }}
+            >
+              <img
+                src={YoutubeIcon}
+                alt=""
+                style={{
+                  width: YouTubeIconStyle.width,
+                  height: YouTubeIconStyle.height,
+                  marginRight: "10px"
+                }}
+              />
+              YouTube
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classnames({
+                active: this.state.activeTab === "2"
+              })}
+              onClick={() => {
+                this.toggle("2");
+              }}
+            >
+              <img
+                src={FacebookIcon}
+                alt=""
+                style={{
+                  width: FacebookIconStyle.width,
+                  height: FacebookIconStyle.height,
+                  marginRight: "10px"
+                }}
+              />
+              Facebook
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classnames({
+                active: this.state.activeTab === "3"
+              })}
+              onClick={() => {
+                this.toggle("3");
+              }}
+            >
+              <img
+                src={null}
+                alt=""
+                style={{
+                  width: xxxIconStyle.width,
+                  height: xxxIconStyle.height,
+                  marginRight: "10px"
+                }}
+              />
+              Instagram
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classnames({
+                active: this.state.activeTab === "4"
+              })}
+              onClick={() => {
+                this.toggle("4");
+              }}
+            >
+              <img
+                src={null}
+                alt=""
+                style={{
+                  width: xxxxIconStyle.width,
+                  height: xxxxIconStyle.height,
+                  marginRight: "10px"
+                }}
+              />
+              Instagram
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={this.state.activeTab}>
+          <TabPane tabId="1">
+            <Row>
+              <Col sm="12">
+                <br />
+                {this.showLoadingForYouTube()}
+                {this.showNoDataForYouTube()}
+                {this.state.youtubeList.map((video, index) => (
+                  <div key={index}>
+                    <YouTubeItem
+                      index={index}
+                      title={video.snippet.title}
+                      description={video.snippet.description}
+                      videoId={video.id.videoId}
+                      publishedAt={video.snippet.publishedAt}
+                    />
+                    <div style={{ height: "10px" }}>&nbsp;</div>
+                  </div>
+                ))}
+              </Col>
+            </Row>
+          </TabPane>
+          <TabPane tabId="2">
+            <Row>
+              <Col sm="12">
+                <br />
+                {this.showLoadingForFacebook()}
+                {this.showNoDataForFacebook()}
+                {this.state.facebookList.map((video, index) => (
+                  <div key={index}>
+                    <FacebookItem
+                      index={index}
+                      title={video.snippet.title}
+                      description={video.snippet.description}
+                      videoId={video.id.videoId}
+                      publishedAt={video.snippet.publishedAt}
+                    />
+                    <div style={{ height: "10px" }}>&nbsp;</div>
+                  </div>
+                ))}
+              </Col>
+            </Row>
+          </TabPane>
+          <TabPane tabId="3">
+            <Row>
+              <Col sm="12">
+                <br />
+                {this.showLoadingForXXX()}
+                {this.showNoDataForXXX()}
+                {this.state.xxxList.map((video, index) => (
+                  <div key={index}>
+                    <FacebookItem
+                      index={index}
+                      title={video.snippet.title}
+                      description={video.snippet.description}
+                      videoId={video.id.videoId}
+                      publishedAt={video.snippet.publishedAt}
+                    />
+                    <div style={{ height: "10px" }}>&nbsp;</div>
+                  </div>
+                ))}
+              </Col>
+            </Row>
+          </TabPane>
+          <TabPane tabId="4">
+            <Row>
+              <Col sm="12">
+                <br />
+                {this.showLoadingForXXXX()}
+                {this.showNoDataForXXXX()}
+                {this.state.xxxxList.map((video, index) => (
+                  <div key={index}>
+                    <FacebookItem
+                      index={index}
+                      title={video.snippet.title}
+                      description={video.snippet.description}
+                      videoId={video.id.videoId}
+                      publishedAt={video.snippet.publishedAt}
+                    />
+                    <div style={{ height: "10px" }}>&nbsp;</div>
+                  </div>
+                ))}
+              </Col>
+            </Row>
+          </TabPane>
+        </TabContent>
+        {/* </CardBody>
+        </Card> */}
       </div>
     );
   }

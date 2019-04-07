@@ -7,7 +7,7 @@ export default class Header extends React.Component {
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <div style={{ height: "20px" }}>&nbsp;</div>
         <div align="center">
-          <h3>Social Media Mashup</h3>
+          <h3>2019 Powerful Social Media Mashup</h3>
         </div>
       </header>
     );
