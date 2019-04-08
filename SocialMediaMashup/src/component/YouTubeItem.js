@@ -43,7 +43,7 @@ export default props => (
               );
             }}
           >
-            Link
+            Open
           </Button>
         </Col>
         <Col xs="7">

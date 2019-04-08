@@ -51,7 +51,7 @@ export default props => (
               );
             }}
           >
-            Go to link
+            Open
           </Button>
         </Col>
       </Row>

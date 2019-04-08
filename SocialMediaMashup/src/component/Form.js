@@ -18,20 +18,20 @@ import classnames from "classnames";
 import * as Config from "../utils/Config";
 import * as Constant from "../utils/Constant";
 import YoutubeIcon from "../img/icon_youtube.png";
-import FacebookIcon from "../img/icon_facebook.png";
+import RedditIcon from "../img/icon_reddit.png";
 import TumblrIcon from "../img/icon_tumblr.png";
 import FlickrIcon from "../img/icon_flickr.png";
 import YouTubeItem from "./YouTubeItem";
-import FacebookItem from "./FacebookItem";
 import TumblrItem from "./TumblrItem";
 import FlickrItem from "./FlickrItem";
+import RedditItem from "./RedditItem";
 
 const YouTubeIconStyle = {
   width: "32px",
   height: "23px"
 };
 
-const FacebookIconStyle = {
+const RedditIconStyle = {
   width: "23px",
   height: "23px"
 };
@@ -52,11 +52,11 @@ class Form extends React.Component {
     this.state = {
       keyword: "",
       isYouTubeApiProcessing: false,
-      isFacebookApiProcessing: false,
+      isRedditApiProcessing: false,
       isTumblrApiProcessing: false,
       isFlickrApiProcessing: false,
       youtubeList: [],
-      facebookList: [],
+      redditList: [],
       tumblrList: [],
       flickrList: [],
       activeTab: "1"
@@ -65,15 +65,15 @@ class Form extends React.Component {
     // This binding is necessary to make `this` work in the callback
     this.toggle = this.toggle.bind(this);
     this.retrieveYouTubeItems = this.retrieveYouTubeItems.bind(this);
-    this.retrieveFacebookItems = this.retrieveFacebookItems.bind(this);
+    this.retrieveRedditItems = this.retrieveRedditItems.bind(this);
     this.retrieveTumblrItems = this.retrieveTumblrItems.bind(this);
     this.retrieveFlickrItems = this.retrieveFlickrItems.bind(this);
     this.showLoadingForYouTube = this.showLoadingForYouTube.bind(this);
-    this.showLoadingForFacebook = this.showLoadingForFacebook.bind(this);
+    this.showLoadingForReddit = this.showLoadingForReddit.bind(this);
     this.showLoadingForTumblr = this.showLoadingForTumblr.bind(this);
     this.showLoadingForFlickr = this.showLoadingForFlickr.bind(this);
     this.showNoDataForYouTube = this.showNoDataForYouTube.bind(this);
-    this.showNoDataForFacebook = this.showNoDataForFacebook.bind(this);
+    this.showNoDataForReddit = this.showNoDataForReddit.bind(this);
     this.showNoDataForTumblr = this.showNoDataForTumblr.bind(this);
     this.showNoDataForFlickr = this.showNoDataForFlickr.bind(this);
     this.TumblrApiCallback = this.TumblrApiCallback.bind(this);
@@ -112,16 +112,11 @@ class Form extends React.Component {
       });
   };
 
-  retrieveFacebookItems = () => {
-    this.setState({ isFacebookApiProcessing: true });
+  retrieveRedditItems = () => {
+    this.setState({ isRedditApiProcessing: true });
     var getData = {
       params: {
-        part: "snippet",
-        maxResults: "10",
-        q: this.state.keyword,
-        // order: "date",
-        type: "video",
-        key: Constant.FLICKR_API_KEY
+        q: this.state.keyword
       }
     };
     let axiosConfig = {
@@ -130,17 +125,18 @@ class Form extends React.Component {
       }
     };
     axios
-      .get(Config.YOUTUBE_API_URL, getData, axiosConfig)
+      .get(Config.REDDIT_URL, getData, axiosConfig)
       .then(res => {
+        console.log(res);
         this.setState({
-          facebookList: res.data.items,
-          isFacebookApiProcessing: false
+          redditList: res.data.data.children,
+          isRedditApiProcessing: false
         });
       })
       .catch(err => {
         console.log("ERROR: ", err);
         this.setState({
-          isFacebookApiProcessing: false
+          isRedditApiProcessing: false
         });
       });
   };
@@ -181,12 +177,8 @@ class Form extends React.Component {
     axios
       .get(Config.FLICKR_API_URL, getData, axiosConfig)
       .then(res => {
-        console.log(res);
         var XMLParser = require("react-xml-parser");
         var xml = new XMLParser().parseFromString(res.data);
-        console.log(xml);
-        console.log(xml.getElementsByTagName("photo"));
-
         this.setState({
           flickrList: xml.getElementsByTagName("photo"),
           isFlickrApiProcessing: false
@@ -223,7 +215,7 @@ class Form extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     this.retrieveYouTubeItems();
-    this.retrieveFacebookItems();
+    this.retrieveRedditItems();
     this.retrieveTumblrItems();
     this.retrieveFlickrItems();
   };
@@ -270,8 +262,8 @@ class Form extends React.Component {
     return null;
   };
 
-  showLoadingForFacebook = () => {
-    if (this.state.isFacebookApiProcessing) {
+  showLoadingForReddit = () => {
+    if (this.state.isRedditApiProcessing) {
       return <Spinner color="success" />;
     }
     return null;
@@ -298,11 +290,8 @@ class Form extends React.Component {
     return null;
   };
 
-  showNoDataForFacebook = () => {
-    if (
-      !this.state.facebookList.length &&
-      !this.state.isFacebookApiProcessing
-    ) {
+  showNoDataForReddit = () => {
+    if (!this.state.redditList.length && !this.state.isRedditApiProcessing) {
       return this.displayNoDataFound();
     }
     return null;
@@ -325,7 +314,7 @@ class Form extends React.Component {
   render() {
     if (
       !this.state.youtubeList.length &&
-      !this.state.facebookList.length &&
+      !this.state.redditList.length &&
       !this.state.tumblrList.length &&
       !this.state.flickrList.length
     ) {
@@ -376,15 +365,15 @@ class Form extends React.Component {
               }}
             >
               <img
-                src={FacebookIcon}
+                src={RedditIcon}
                 alt=""
                 style={{
-                  width: FacebookIconStyle.width,
-                  height: FacebookIconStyle.height,
+                  width: RedditIconStyle.width,
+                  height: RedditIconStyle.height,
                   marginRight: "10px"
                 }}
               />
-              Facebook
+              Reddit
             </NavLink>
           </NavItem>
           <NavItem>
@@ -456,19 +445,23 @@ class Form extends React.Component {
           </TabPane>
           <TabPane tabId="2">
             <br />
-            {this.showLoadingForFacebook()}
-            {this.showNoDataForFacebook()}
+            {this.showLoadingForReddit()}
+            {this.showNoDataForReddit()}
             <CardColumns>
               <Row>
                 <Col sm="12">
-                  {this.state.facebookList.map((video, index) => (
+                  {this.state.redditList.map((item, index) => (
                     <div key={index}>
-                      <FacebookItem
+                      <RedditItem
                         index={index}
-                        title={video.snippet.title}
-                        description={video.snippet.description}
-                        videoId={video.id.videoId}
-                        publishedAt={video.snippet.publishedAt}
+                        title={item.data.title}
+                        photo={item.data.url}
+                        ups={item.data.ups}
+                        downs={item.data.downs}
+                        permalink={item.data.permalink}
+                        author={item.data.author_fullname}
+                        numComments={item.data.num_comments}
+                        publishedAt={item.data.created_utc}
                       />
                       <div style={{ height: "10px" }}>&nbsp;</div>
                     </div>
