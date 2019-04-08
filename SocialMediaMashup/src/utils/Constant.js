@@ -11,5 +11,5 @@ export const TUMBLR_TOKEN =
 export const TUMBLR_TOKEN_SECRET =
   "9e4jQ2UwDhGiH8G2kKWJaEmizx18ur9qQX2S0lc7XFfpY8gzp5";
 
-export const FACEBOOK_API_KEY = "";
+export const FLICKR_API_KEY = "16413799e7d346127549950ae8ffc5f1";
 export const TWITTER_API_KEY = "";

@@ -20,9 +20,11 @@ import * as Constant from "../utils/Constant";
 import YoutubeIcon from "../img/icon_youtube.png";
 import FacebookIcon from "../img/icon_facebook.png";
 import TumblrIcon from "../img/icon_tumblr.png";
+import FlickrIcon from "../img/icon_flickr.png";
 import YouTubeItem from "./YouTubeItem";
 import FacebookItem from "./FacebookItem";
 import TumblrItem from "./TumblrItem";
+import FlickrItem from "./FlickrItem";
 
 const YouTubeIconStyle = {
   width: "32px",
@@ -39,7 +41,7 @@ const TumblrIconStyle = {
   height: "23px"
 };
 
-const xxxxIconStyle = {
+const FlickrIconStyle = {
   width: "23px",
   height: "23px"
 };
@@ -52,11 +54,11 @@ class Form extends React.Component {
       isYouTubeApiProcessing: false,
       isFacebookApiProcessing: false,
       isTumblrApiProcessing: false,
-      isXXXXApiProcessing: false,
+      isFlickrApiProcessing: false,
       youtubeList: [],
       facebookList: [],
       tumblrList: [],
-      xxxxList: [],
+      flickrList: [],
       activeTab: "1"
     };
 
@@ -65,15 +67,15 @@ class Form extends React.Component {
     this.retrieveYouTubeItems = this.retrieveYouTubeItems.bind(this);
     this.retrieveFacebookItems = this.retrieveFacebookItems.bind(this);
     this.retrieveTumblrItems = this.retrieveTumblrItems.bind(this);
-    this.retrieveXXXXItems = this.retrieveXXXXItems.bind(this);
+    this.retrieveFlickrItems = this.retrieveFlickrItems.bind(this);
     this.showLoadingForYouTube = this.showLoadingForYouTube.bind(this);
     this.showLoadingForFacebook = this.showLoadingForFacebook.bind(this);
     this.showLoadingForTumblr = this.showLoadingForTumblr.bind(this);
-    this.showLoadingForXXXX = this.showLoadingForXXXX.bind(this);
+    this.showLoadingForFlickr = this.showLoadingForFlickr.bind(this);
     this.showNoDataForYouTube = this.showNoDataForYouTube.bind(this);
     this.showNoDataForFacebook = this.showNoDataForFacebook.bind(this);
     this.showNoDataForTumblr = this.showNoDataForTumblr.bind(this);
-    this.showNoDataForXXXX = this.showNoDataForXXXX.bind(this);
+    this.showNoDataForFlickr = this.showNoDataForFlickr.bind(this);
     this.TumblrApiCallback = this.TumblrApiCallback.bind(this);
   }
 
@@ -85,7 +87,6 @@ class Form extends React.Component {
         part: "snippet",
         maxResults: "10",
         q: this.state.keyword,
-        // order: "date",
         type: "video",
         key: Constant.YOUTUBE_API_KEY
       }
@@ -120,7 +121,7 @@ class Form extends React.Component {
         q: this.state.keyword,
         // order: "date",
         type: "video",
-        key: Constant.FACEBOOK_API_KEY
+        key: Constant.FLICKR_API_KEY
       }
     };
     let axiosConfig = {
@@ -162,16 +163,14 @@ class Form extends React.Component {
     );
   };
 
-  retrieveXXXXItems = () => {
-    this.setState({ isXXXXApiProcessing: true });
+  retrieveFlickrItems = () => {
+    this.setState({ isFlickrApiProcessing: true });
     var getData = {
       params: {
-        part: "snippet",
-        maxResults: "10",
-        q: this.state.keyword,
-        // order: "date",
-        type: "video",
-        key: Constant.FACEBOOK_API_KEY
+        method: "flickr.photos.search",
+        text: this.state.keyword,
+        per_page: 50,
+        api_key: Constant.FLICKR_API_KEY
       }
     };
     let axiosConfig = {
@@ -180,17 +179,23 @@ class Form extends React.Component {
       }
     };
     axios
-      .get(Config.YOUTUBE_API_URL, getData, axiosConfig)
+      .get(Config.FLICKR_API_URL, getData, axiosConfig)
       .then(res => {
+        console.log(res);
+        var XMLParser = require("react-xml-parser");
+        var xml = new XMLParser().parseFromString(res.data);
+        console.log(xml);
+        console.log(xml.getElementsByTagName("photo"));
+
         this.setState({
-          xxxxList: res.data.items,
-          isXXXXApiProcessing: false
+          flickrList: xml.getElementsByTagName("photo"),
+          isFlickrApiProcessing: false
         });
       })
       .catch(err => {
         console.log("ERROR: ", err);
         this.setState({
-          isXXXXApiProcessing: false
+          isFlickrApiProcessing: false
         });
       });
   };
@@ -218,9 +223,9 @@ class Form extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     this.retrieveYouTubeItems();
-    // this.retrieveFacebookItems();
+    this.retrieveFacebookItems();
     this.retrieveTumblrItems();
-    // this.retrieveXXXXItems();
+    this.retrieveFlickrItems();
   };
 
   displayForm = () => {
@@ -279,8 +284,8 @@ class Form extends React.Component {
     return null;
   };
 
-  showLoadingForXXXX = () => {
-    if (this.state.isXXXXApiProcessing) {
+  showLoadingForFlickr = () => {
+    if (this.state.isFlickrApiProcessing) {
       return <Spinner color="success" />;
     }
     return null;
@@ -310,8 +315,8 @@ class Form extends React.Component {
     return null;
   };
 
-  showNoDataForXXXX = () => {
-    if (!this.state.xxxxList.length && !this.state.isXXXXApiProcessing) {
+  showNoDataForFlickr = () => {
+    if (!this.state.flickrList.length && !this.state.isFlickrApiProcessing) {
       return this.displayNoDataFound();
     }
     return null;
@@ -322,7 +327,7 @@ class Form extends React.Component {
       !this.state.youtubeList.length &&
       !this.state.facebookList.length &&
       !this.state.tumblrList.length &&
-      !this.state.xxxxList.length
+      !this.state.flickrList.length
     ) {
       return (
         <div>
@@ -413,15 +418,15 @@ class Form extends React.Component {
               }}
             >
               <img
-                src={null}
+                src={FlickrIcon}
                 alt=""
                 style={{
-                  width: xxxxIconStyle.width,
-                  height: xxxxIconStyle.height,
+                  width: FlickrIconStyle.width,
+                  height: FlickrIconStyle.height,
                   marginRight: "10px"
                 }}
               />
-              Instagram
+              Flickr
             </NavLink>
           </NavItem>
         </Nav>
@@ -499,19 +504,21 @@ class Form extends React.Component {
 
           <TabPane tabId="4">
             <br />
-            {this.showLoadingForXXXX()}
-            {this.showNoDataForXXXX()}
+            {this.showLoadingForFlickr()}
+            {this.showNoDataForFlickr()}
             <CardColumns>
               <Row>
                 <Col sm="12">
-                  {this.state.xxxxList.map((video, index) => (
+                  {this.state.flickrList.map((item, index) => (
                     <div key={index}>
-                      <FacebookItem
-                        index={index}
-                        title={video.snippet.title}
-                        description={video.snippet.description}
-                        videoId={video.id.videoId}
-                        publishedAt={video.snippet.publishedAt}
+                      <FlickrItem
+                        index={item.attributes.id}
+                        title={item.attributes.title}
+                        owner={item.attributes.owner}
+                        farmId={item.attributes.farm}
+                        serverId={item.attributes.server}
+                        photoId={item.attributes.id}
+                        secret={item.attributes.secret}
                       />
                       <div style={{ height: "10px" }}>&nbsp;</div>
                     </div>

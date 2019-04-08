@@ -43,7 +43,7 @@ export default props => (
               window.open(props.url, "_blank");
             }}
           >
-            Go to link
+            Link
           </Button>
         </Col>
         <Col xs="7">

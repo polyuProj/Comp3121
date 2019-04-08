@@ -38,12 +38,12 @@ export default props => (
             onClick={event => {
               event.preventDefault();
               window.open(
-                "https://www.youtube.com/watch?v=" + props.videoId,
+                Config.YOUTUBE_VIDEO_WATCH_URL + props.videoId,
                 "_blank"
               );
             }}
           >
-            Go to link
+            Link
           </Button>
         </Col>
         <Col xs="7">
