@@ -226,7 +226,6 @@ class Form extends React.Component {
         <CardBody>
           <form onSubmit={this.handleSubmit}>
             <div className="form-group">
-              <label htmlFor="exampleInputEmail1">Keyword</label>
               <input
                 className="form-control"
                 placeholder="Enter keyword"
@@ -235,7 +234,7 @@ class Form extends React.Component {
               />
             </div>
             <Button type="submit" color="primary" size="lg" block>
-              Submit
+              Search
             </Button>
           </form>
         </CardBody>

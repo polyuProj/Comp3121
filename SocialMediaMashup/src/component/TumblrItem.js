@@ -15,9 +15,13 @@ export default props => (
   <Card>
     <CardBody>
       <CardTitle>
-        <h4>{props.title}</h4>
+        <h4>
+          <div dangerouslySetInnerHTML={{ __html: props.title }} />
+        </h4>
       </CardTitle>
-      <CardSubtitle>{props.description}</CardSubtitle>
+      <CardSubtitle>
+        <div dangerouslySetInnerHTML={{ __html: props.description }} />
+      </CardSubtitle>
       <Row style={{ marginLeft: "3px", marginRight: "3px" }}>
         {Object.keys(props.tags).map(key => (
           <div key={key}>

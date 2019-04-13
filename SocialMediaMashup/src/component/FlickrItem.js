@@ -15,7 +15,9 @@ export default props => (
   <Card>
     <CardBody>
       <CardTitle>
-        <h4>{props.title}</h4>
+        <h4>
+          <div dangerouslySetInnerHTML={{ __html: props.title }} />
+        </h4>
       </CardTitle>
       <img
         style={{ width: "100%", height: "100%" }}

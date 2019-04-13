@@ -18,7 +18,9 @@ export default props => (
   <Card>
     <CardBody>
       <CardTitle>
-        <h4>{props.title}</h4>
+        <h4>
+          <div dangerouslySetInnerHTML={{ __html: props.title }} />
+        </h4>
       </CardTitle>
       <CardImg
         style={{ width: "100%", height: "100%" }}
@@ -27,7 +29,7 @@ export default props => (
       />
       <div style={{ height: "10px" }}>&nbsp;</div>
       <Row>
-        <Col xs="4" align="center">
+        <Col xs="6" align="left">
           <div>
             <img
               src={UpIcon}
@@ -36,16 +38,7 @@ export default props => (
             {props.ups}
           </div>
         </Col>
-        <Col xs="4" align="center">
-          <div>
-            <img
-              src={DownIcon}
-              style={{ width: "20px", height: "20px", marginRight: "5px" }}
-            />
-            {props.downs}
-          </div>
-        </Col>
-        <Col xs="4" align="center">
+        <Col xs="6" align="right">
           <img
             src={CommentsIcon}
             style={{ width: "20px", height: "20px", marginRight: "5px" }}
