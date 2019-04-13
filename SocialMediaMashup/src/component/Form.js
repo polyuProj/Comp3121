@@ -175,7 +175,7 @@ class Form extends React.Component {
     // Make the request
     client.taggedPosts(
       this.state.keyword,
-      { filter: "text" },
+      { filter: "photo", type: "photo" },
       this.TumblrApiCallback
     );
   };
@@ -525,12 +525,12 @@ class Form extends React.Component {
             <CardColumns>
               <Row>
                 <Col sm="12">
-                  {console.log(this.state.tumblrList)}
                   {this.state.tumblrList.map((item, index) => (
                     <div key={index}>
                       <TumblrItem
                         index={index}
                         title={item.blog_name}
+                        photos={item.photos}
                         tags={item.tags}
                         description={item.blog.description}
                         url={item.post_url}

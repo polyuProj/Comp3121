@@ -7,7 +7,8 @@ import {
   Row,
   Col,
   Button,
-  Badge
+  Badge,
+  CardImg
 } from "reactstrap";
 import moment from "moment";
 
@@ -22,6 +23,18 @@ export default props => (
       <CardSubtitle>
         <div dangerouslySetInnerHTML={{ __html: props.description }} />
       </CardSubtitle>
+      {props.photos !== undefined
+        ? props.photos.map((item, index) => (
+            <div key={index}>
+              <CardImg
+                style={{ width: "100%", height: "100%" }}
+                src={item.original_size.url}
+                alt=""
+              />
+            </div>
+          ))
+        : ""}
+      <div style={{ height: "10px" }}>&nbsp;</div>
       <Row style={{ marginLeft: "3px", marginRight: "3px" }}>
         {Object.keys(props.tags).map(key => (
           <div key={key}>
