@@ -46,11 +46,20 @@ const FlickrIconStyle = {
   height: "23px"
 };
 
+const tumblr = require("tumblr.js");
+const client = tumblr.createClient({
+  consumer_key: Constant.TUMBLR_CONSUMER_KEY,
+  consumer_secret: Constant.TUMBLR_CONSUMER_SECRET,
+  token: Constant.TUMBLR_TOKEN,
+  token_secret: Constant.TUMBLR_TOKEN_SECRET
+});
+
 class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       keyword: "",
+      isLoading: false,
       isYouTubeApiProcessing: false,
       isRedditApiProcessing: false,
       isTumblrApiProcessing: false,
@@ -78,6 +87,25 @@ class Form extends React.Component {
     this.showNoDataForFlickr = this.showNoDataForFlickr.bind(this);
     this.TumblrApiCallback = this.TumblrApiCallback.bind(this);
   }
+
+  // Native method
+  componentDidMount() {
+    this.setState({
+      keyword: "NBA",
+      isLoading: true
+    });
+
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      });
+      this.retrieveYouTubeItems();
+      this.retrieveRedditItems();
+      this.retrieveTumblrItems();
+      this.retrieveFlickrItems();
+    }, 2000);
+  }
+  // Native method
 
   // Network
   retrieveYouTubeItems = () => {
@@ -143,13 +171,6 @@ class Form extends React.Component {
 
   retrieveTumblrItems = () => {
     this.setState({ isTumblrApiProcessing: true });
-    var tumblr = require("tumblr.js");
-    var client = tumblr.createClient({
-      consumer_key: Constant.TUMBLR_CONSUMER_KEY,
-      consumer_secret: Constant.TUMBLR_CONSUMER_SECRET,
-      token: Constant.TUMBLR_TOKEN,
-      token_secret: Constant.TUMBLR_TOKEN_SECRET
-    });
 
     // Make the request
     client.taggedPosts(
@@ -254,6 +275,18 @@ class Form extends React.Component {
     );
   };
 
+  displayPleaseWait = () => {
+    return (
+      <div align="center">
+        <Card>
+          <CardBody>
+            <div>Loading...</div>
+          </CardBody>
+        </Card>
+      </div>
+    );
+  };
+
   showLoadingForYouTube = () => {
     if (this.state.isYouTubeApiProcessing) {
       return <Spinner color="success" />;
@@ -283,28 +316,44 @@ class Form extends React.Component {
   };
 
   showNoDataForYouTube = () => {
-    if (!this.state.youtubeList.length && !this.state.isYouTubeApiProcessing) {
+    if (
+      this.state.youtubeList === null &&
+      !this.state.youtubeList.length &&
+      !this.state.isYouTubeApiProcessing
+    ) {
       return this.displayNoDataFound();
     }
     return null;
   };
 
   showNoDataForReddit = () => {
-    if (!this.state.redditList.length && !this.state.isRedditApiProcessing) {
+    if (
+      this.state.redditList === null &&
+      !this.state.redditList.length &&
+      !this.state.isRedditApiProcessing
+    ) {
       return this.displayNoDataFound();
     }
     return null;
   };
 
   showNoDataForTumblr = () => {
-    if (!this.state.tumblrList.length && !this.state.isTumblrApiProcessing) {
+    if (
+      this.state.tumblrList === null &&
+      !this.state.tumblrList.length &&
+      !this.state.isTumblrApiProcessing
+    ) {
       return this.displayNoDataFound();
     }
     return null;
   };
 
   showNoDataForFlickr = () => {
-    if (!this.state.flickrList.length && !this.state.isFlickrApiProcessing) {
+    if (
+      this.state.flickrList === null &&
+      !this.state.flickrList.length &&
+      !this.state.isFlickrApiProcessing
+    ) {
       return this.displayNoDataFound();
     }
     return null;
@@ -322,7 +371,7 @@ class Form extends React.Component {
           <br />
           {this.displayForm()}
           <br />
-          {this.displayNoDataFound()}
+          {this.state.isLoading === true ? this.displayPleaseWait() : null}
         </div>
       );
     }
@@ -476,6 +525,7 @@ class Form extends React.Component {
             <CardColumns>
               <Row>
                 <Col sm="12">
+                  {console.log(this.state.tumblrList)}
                   {this.state.tumblrList.map((item, index) => (
                     <div key={index}>
                       <TumblrItem

@@ -14,7 +14,7 @@ export default class Header extends React.Component {
         />
         <div style={{ height: "20px" }}>&nbsp;</div>
         <div align="center">
-          <h3>2019 Powerful Social Media Mashup</h3>
+          <h3>2019 Powerful Social Media Mashup for NBA</h3>
         </div>
       </header>
     );
