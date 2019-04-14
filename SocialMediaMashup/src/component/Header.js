@@ -10,7 +10,7 @@ export default class Header extends React.Component {
           <img
             src={PolyUIcon}
             className="App-logo"
-            alt="logo"
+            alt="2019 Powerful Social Media Mashup for NBA"
             style={{ width: "300px", height: "58px" }}
           />
         </a>
