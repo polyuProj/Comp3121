@@ -6,12 +6,15 @@ export default class Header extends React.Component {
     return (
       <header>
         <div style={{ height: "20px" }}>&nbsp;</div>
-        <img
-          src={PolyUIcon}
-          className="App-logo"
-          alt="logo"
-          style={{ width: "300px", height: "58px" }}
-        />
+        <a href="https://polyuproj.github.io/Mashup/SocialMediaMashup/build/#/">
+          <img
+            src={PolyUIcon}
+            className="App-logo"
+            alt="logo"
+            style={{ width: "300px", height: "58px" }}
+          />
+        </a>
+
         <div style={{ height: "20px" }}>&nbsp;</div>
         <div align="center">
           <h3>2019 Powerful Social Media Mashup for NBA</h3>
