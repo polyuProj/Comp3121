@@ -21,7 +21,7 @@ class Error extends React.Component {
         <div align="center">
           <Card>
             <CardBody>
-              <div>404 Page not found.</div>
+              <div>404 - Page not found.</div>
             </CardBody>
           </Card>
           <br />
